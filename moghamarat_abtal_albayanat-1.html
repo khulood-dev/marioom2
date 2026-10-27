@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>مغامرة أبطال البيانات</title>
+<style>
+:root{--pink:#ff4f9a;--purple:#7655d9;--blue:#53b9f5;--gold:#ffc84b}
+*{box-sizing:border-box}body{margin:0;font-family:Tahoma,Arial,sans-serif;background:linear-gradient(135deg,#dff7ff,#fff0f7,#fff8d8);color:#34225b;min-height:100vh}
+main{max-width:850px;margin:auto;padding:18px}.card{background:#ffffffed;border:3px solid #fff;border-radius:26px;padding:22px;box-shadow:0 10px 28px #6b4b8b20;margin:12px 0}
+.hero{text-align:center;background:linear-gradient(135deg,#ffe0f0,#e4e6ff,#d9f8ff);position:relative;overflow:hidden}
+h1{font-size:clamp(28px,6vw,48px);margin:8px 0;color:#7b42c7;text-shadow:2px 2px #fff}h2{margin-top:0}.subtitle{font-size:18px;line-height:1.8}
+.names{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:18px 0}.pill{background:white;border:2px solid #ffb8d5;border-radius:18px;padding:10px 15px;font-weight:bold}
+button{font:inherit;font-weight:bold;border:0;border-radius:16px;padding:13px 20px;cursor:pointer;transition:transform .15s,filter .15s}
+button:hover{transform:translateY(-2px);filter:brightness(1.04)}.primary{background:linear-gradient(135deg,#ff4f9a,#ff78b6);color:white;box-shadow:0 5px #d92e78}.option{display:block;width:100%;text-align:right;background:#f4f0ff;border:2px solid #d7caff;margin:9px 0;color:#382866}.option:hover{background:#e9e1ff}.option:disabled{cursor:default}.correct{background:#d9ffe7!important;border-color:#31bd73!important}.wrong{background:#ffe0e4!important;border-color:#f36b82!important}
+.top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}.tag{background:#e9e1ff;border-radius:30px;padding:8px 13px;font-weight:bold}.bar{height:12px;background:#eee7fa;border-radius:20px;overflow:hidden;margin:15px 0}.bar span{display:block;height:100%;background:linear-gradient(90deg,#ff78b6,#8b69f2);transition:width .3s}
+.chart{display:flex;align-items:flex-end;justify-content:space-around;height:190px;background:#fbfaff;border:2px solid #eee6ff;border-radius:18px;padding:14px 8px 0;margin:18px 0 8px}.col{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;width:27%;gap:5px}.num{font-weight:bold}.stick{width:62%;max-width:65px;border-radius:10px 10px 0 0;min-height:10px;animation:grow .7s ease-out}.fruit{font-size:24px}.label{font-size:14px;text-align:center;padding-bottom:8px}.feedback{padding:13px;border-radius:15px;margin-top:12px;font-weight:bold}.good{background:#dcffea;color:#17683c}.bad{background:#fff0d9;color:#875600}.hidden{display:none}.stars{font-size:26px;letter-spacing:5px;color:#f2b900;animation:twinkle 1s infinite alternate}.footer{text-align:center;color:#765f91;font-size:13px;margin:20px}
+.confetti{position:fixed;top:-20px;font-size:22px;pointer-events:none;animation:fall 2.3s linear forwards;z-index:9}
+@keyframes grow{from{height:0}to{height:var(--h)}}@keyframes twinkle{to{transform:scale(1.12);filter:brightness(1.2)}}@keyframes fall{to{transform:translateY(110vh) rotate(500deg);opacity:.2}}
+@media(max-width:520px){main{padding:10px}.card{padding:16px}.chart{height:160px}.subtitle{font-size:16px}}
+</style>
+</head>
+<body>
+<main>
+<section id="start" class="card hero">
+<div class="stars">★ ✦ ★ ✦ ★</div>
+<div style="font-size:58px">📊🌈🧮</div>
+<h1>مغامرة أبطال البيانات</h1>
+<div class="subtitle">لعبة رياضيات تفاعلية للصف الثاني الابتدائي<br><b>درس: تمثيل البيانات وقراءتها</b></div>
+<div class="names"><div class="pill">👧 إعداد الطالبة: فرح محمد</div><div class="pill">👩‍🏫 إشراف الأستاذة: أسماء محمود</div></div>
+<p>أجيبي عن الأسئلة، واجمعي النجوم حتى تصلي إلى كنز الرياضيات! 🎁</p>
+<button class="primary" onclick="begin()">ابدئي اللعب ✨</button>
+</section>
+<section id="game" class="card hidden">
+<div class="top"><span id="level" class="tag">المرحلة 1 من 8</span><span class="tag">⭐ النقاط: <b id="score">0</b></span></div>
+<div class="bar"><span id="progress" style="width:12.5%"></span></div>
+<h2 id="question"></h2><div id="chart"></div><div id="options"></div><div id="feedback" class="feedback hidden"></div>
+<div style="text-align:left;margin-top:14px"><button id="next" class="primary hidden" onclick="advance()">السؤال التالي ←</button></div>
+</section>
+<section id="finish" class="card hero hidden">
+<div style="font-size:75px">🏆🎉🎁</div><h1>أحسنتِ يا بطلة!</h1><p class="subtitle">أنهيتِ مغامرة أبطال البيانات!</p><h2 id="result"></h2><div class="stars">★ ★ ★ ★ ★</div>
+<div class="names"><div class="pill">إعداد الطالبة: فرح محمد</div><div class="pill">إشراف الأستاذة: أسماء محمود</div></div>
+<button class="primary" onclick="restart()">🔄 اللعب من جديد</button>
+</section>
+<div class="footer">نتعلّم ونمرح مع الرياضيات 💜</div>
+</main>
+<script>
+const qs=[
+{q:"أي فاكهة حصلت على أكبر عدد من الأصوات؟",data:[["التفاح","🍎",5],["الموز","🍌",3],["العنب","🍇",2]],opts:["التفاح","الموز","العنب"],a:0,why:"التفاح حصل على 5 أصوات، وهو العدد الأكبر."},
+{q:"كم طالبة اختارت الموز؟",data:[["التفاح","🍎",4],["الموز","🍌",6],["العنب","🍇",3]],opts:["4 طالبات","6 طالبات","3 طالبات"],a:1,why:"يمثل الموز 6 طالبات في الرسم."},
+{q:"كم صوتًا حصل عليه القطط والأرانب معًا؟",data:[["القطط","🐱",4],["الأرانب","🐰",2],["الطيور","🐦",3]],opts:["5 أصوات","6 أصوات","7 أصوات"],a:1,why:"4 + 2 = 6 أصوات."},
+{q:"أي حيوان حصل على أقل عدد من الأصوات؟",data:[["القطط","🐱",4],["الأرانب","🐰",2],["الطيور","🐦",5]],opts:["القطط","الأرانب","الطيور"],a:1,why:"الأرانب حصلت على صوتين فقط، وهو العدد الأقل."},
+{q:"كم عدد الأصوات لجميع الفواكه في الرسم؟",data:[["التفاح","🍎",2],["الموز","🍌",3],["العنب","🍇",4]],opts:["7 أصوات","8 أصوات","9 أصوات"],a:2,why:"2 + 3 + 4 = 9 أصوات."},
+{q:"إذا كانت كل ⭐ تمثل صوتًا واحدًا، فماذا تمثل ⭐⭐⭐⭐؟",data:[["النجوم","⭐",4]],opts:["صوتان","4 أصوات","6 أصوات"],a:1,why:"كل نجمة تمثل صوتًا واحدًا؛ أربع نجوم تمثل 4 أصوات."},
+{q:"في الرسم: القراءة 5 أصوات، والرسم 3 أصوات. كم يزيد عدد محبي القراءة؟",data:[["القراءة","📚",5],["الرسم","🎨",3]],opts:["صوت واحد","صوتان","3 أصوات"],a:1,why:"5 − 3 = 2؛ يزيد العدد بصوتين."},
+{q:"إذا اختار 4 طلاب التفاح وطالبان الموز، فكم طالبًا شارك؟",data:[["التفاح","🍎",4],["الموز","🍌",2]],opts:["5 طلاب","6 طلاب","7 طلاب"],a:1,why:"4 + 2 = 6 طلاب."},
+{q:"كم صوتًا حصلت عليه الفراولة؟",data:[["الفراولة","🍓",6],["البرتقال","🍊",4],["الكمثرى","🍐",3]],opts:["3 أصوات","4 أصوات","6 أصوات"],a:2,why:"العمود الخاص بالفراولة يصل إلى العدد 6."},
+{q:"أي نشاط اختاره 3 أطفال؟",data:[["السباحة","🏊",5],["القراءة","📚",3],["الجري","🏃",4]],opts:["السباحة","القراءة","الجري"],a:1,why:"القراءة تمثل 3 أطفال في الرسم."},
+{q:"ما مجموع أصوات السباحة والجري؟",data:[["السباحة","🏊",5],["القراءة","📚",2],["الجري","🏃",4]],opts:["7 أصوات","8 أصوات","9 أصوات"],a:2,why:"5 + 4 = 9 أصوات."},
+{q:"في الرسم، حصل اللون الأحمر على 7 أصوات والأزرق على 5. كم صوتًا أكثر للأحمر؟",data:[["الأحمر","🔴",7],["الأزرق","🔵",5]],opts:["صوتان","3 أصوات","5 أصوات"],a:0,why:"7 − 5 = 2؛ الفرق صوتان."},
+{q:"كم طالبًا يفضل القطط والطيور معًا؟",data:[["القطط","🐱",3],["الأرانب","🐰",4],["الطيور","🐦",2]],opts:["5 طلاب","6 طلاب","7 طلاب"],a:0,why:"3 + 2 = 5 طلاب."},
+{q:"أي عمود يمثل العدد 4؟",data:[["الكرة","⚽",2],["الدراجة","🚲",4],["الكتاب","📘",6]],opts:["الكرة","الدراجة","الكتاب"],a:1,why:"عدد الدراجة هو 4 في الرسم."},
+{q:"إذا كان عدد محبي التفاح 3 وزاد صوتان، فكم يصبح العدد؟",data:[["التفاح","🍎",3],["الموز","🍌",4]],opts:["4 أصوات","5 أصوات","6 أصوات"],a:1,why:"3 + 2 = 5 أصوات."},
+{q:"ما العدد الذي يمثله العمود الأقصر؟",data:[["القطة","🐱",5],["السمكة","🐟",2],["العصفور","🐦",4]],opts:["5","2","4"],a:1,why:"عمود السمكة هو الأقصر ويمثل العدد 2."},
+{q:"كم عدد الطلاب الذين اختاروا التفاح إذا كان كل رمز 🍎 يمثل طالبين؟",data:[["التفاح","🍎🍎🍎",6]],opts:["3 طلاب","6 طلاب","8 طلاب"],a:1,why:"هناك 3 رموز، وكل رمز يمثل طالبين: 3 × 2 = 6 طلاب."},
+{q:"في جدول الألعاب: كرة 4، مكعبات 6، دمية 3. ما اللعبة الأكثر اختيارًا؟",data:[["كرة","⚽",4],["مكعبات","🧱",6],["دمية","🧸",3]],opts:["الكرة","المكعبات","الدمية"],a:1,why:"المكعبات حصلت على 6 اختيارات، وهو العدد الأكبر."},
+{q:"ما مجموع الطلاب الذين اختاروا الدمية والكرة؟",data:[["كرة","⚽",4],["مكعبات","🧱",5],["دمية","🧸",3]],opts:["6 طلاب","7 طلاب","8 طلاب"],a:1,why:"4 + 3 = 7 طلاب."},
+{q:"إذا كان لدينا 8 أصوات وقسمناها بالتساوي بين مجموعتين، فكم صوتًا في كل مجموعة؟",data:[["الأصوات","🔵",8]],opts:["3 أصوات","4 أصوات","5 أصوات"],a:1,why:"8 ÷ 2 = 4 أصوات في كل مجموعة."}
+];
+let i=0,score=0,locked=false;
+const colors=["#ff6299","#ffc94d","#8c72f0"];
+function begin(){document.getElementById("start").classList.add("hidden");document.getElementById("finish").classList.add("hidden");document.getElementById("game").classList.remove("hidden");i=0;score=0;render()}
+function render(){locked=false;const q=qs[i];document.getElementById("level").textContent=`المرحلة ${i+1} من ${qs.length}`;document.getElementById("score").textContent=score;document.getElementById("progress").style.width=((i+1)/qs.length*100)+"%";document.getElementById("question").textContent=q.q;
+let max=Math.max(...q.data.map(d=>d[2]));document.getElementById("chart").innerHTML='<div class="chart">'+q.data.map((d,j)=>`<div class="col"><span class="num">${d[2]}</span><div class="stick" style="--h:${Math.max(18,d[2]/max*115)}px;height:${Math.max(18,d[2]/max*115)}px;background:${colors[j%3]}"></div><span class="fruit">${d[1]}</span><span class="label">${d[0]}</span></div>`).join("")+'</div>';
+document.getElementById("options").innerHTML=q.opts.map((o,j)=>`<button class="option" onclick="answer(${j},this)">${["أ","ب","ج"][j]}. ${o}</button>`).join("");
+document.getElementById("feedback").className="feedback hidden";document.getElementById("next").classList.add("hidden")}
+function answer(n,el){if(locked)return;locked=true;const q=qs[i],buttons=[...document.querySelectorAll(".option")];buttons.forEach(b=>b.disabled=true);if(n===q.a){score++;el.classList.add("correct");document.getElementById("feedback").textContent="أحسنتِ! إجابة صحيحة 🎉 "+q.why;document.getElementById("feedback").className="feedback good";burst()}else{el.classList.add("wrong");buttons[q.a].classList.add("correct");document.getElementById("feedback").textContent="لا بأس، نتعلم بالمحاولة! 💪 "+q.why;document.getElementById("feedback").className="feedback bad"}document.getElementById("score").textContent=score;document.getElementById("next").textContent=i===qs.length-1?"عرض النتيجة 🏆":"السؤال التالي ←";document.getElementById("next").classList.remove("hidden")}
+function advance(){if(i<qs.length-1){i++;render()}else{document.getElementById("game").classList.add("hidden");document.getElementById("finish").classList.remove("hidden");document.getElementById("result").textContent=`نتيجتكِ: ${score} من ${qs.length}`;burst()}}
+function restart(){document.getElementById("finish").classList.add("hidden");begin()}
+function burst(){for(let k=0;k<24;k++){const e=document.createElement("span");e.className="confetti";e.textContent=["⭐","✨","🎉","💜","🌸"][Math.floor(Math.random()*5)];e.style.left=Math.random()*100+"vw";e.style.animationDelay=Math.random()*.6+"s";document.body.appendChild(e);setTimeout(()=>e.remove(),3000)}}
+</script>
+</body></html>
